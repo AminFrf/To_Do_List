@@ -25,7 +25,8 @@ class to_do_list :
             print("2. delete task")
             print("3. see list of tasks")
             print("4. save list")
-            print("5. exite")
+            print("5. load list")
+            print("6. exite")
             choice = input("enter your chois : ")
             
             if choice not in ["1" , "2" ,"3" ,"4" ,"5" ]:
@@ -83,4 +84,13 @@ if __name__ == "__main__" :
     
     while(running) :
         
-        my_todo_list.main_menu()
+        choice = my_todo_list.main_menu()
+        
+        if choice == "1":
+            my_todo_list.add_task()
+        elif choice == "2":
+            my_todo_list.delete_task()
+        elif choice == "3":
+            my_todo_list.see_list_of_tasks()
+        elif choice == "6":
+            running = False
