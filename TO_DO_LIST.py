@@ -1,4 +1,5 @@
 import csv
+import emoji
 
 
 class task :
@@ -33,7 +34,9 @@ class to_do_list :
             choice = input("enter your chois : ")
             
             if choice not in ["1" , "2" ,"3" ,"4" ,"5" , "6"]:
+                print()
                 print("wrong input !!!")
+                print()
             else : 
                 print_again = False
         return choice 
@@ -45,28 +48,49 @@ class to_do_list :
         while True :
             priority = int(input("enter a priority for this task : \n1.low\n2.medium\n3.high\n: "))
             if(priority not in [1 , 2 , 3]) :
+                
+                print()
                 print("wrong input !!!")
-                print("please try again ") 
+                print("please try again ")
+                print() 
             else :
                 break
+       
             
         new_task = task(name , description , priority)     
         self.todolist.append(new_task)
+        self.sort_task()
+        
+        print()
         print("task added successfully !")   
+        print()
         
     def delete_task(self) :
+        
         name = input("enter the name of the task you want to delete : ")
         find = False
         for t in self.todolist :
             if t.name == name :
                 self.todolist.remove(t)
+                
+                print()
                 print(f"task {name} deleted successfully !")
+                print()
+                
                 find = True
                 break        
         
         if find == False :
+            print()
             print(f"task {name} not found") 
-            
+            print()
+    def sort_task(self) :
+        for i in range(len(self.todolist)-1) :
+            for j in range(len(self.todolist)-1-i):
+                if(self.todolist[j].priority < self.todolist[j+1].priority ) :
+                    temp = self.todolist[j]
+                    self.todolist[j] = self.todolist[j+1]
+                    self.todolist[j+1] = temp
     def see_list_of_tasks(self) :
         
         if not self.todolist :
@@ -80,7 +104,15 @@ class to_do_list :
             
             print("name : " + t.name)
             print("description : " + t.description)
-            print("priority : " + str(t.priority))
+            num_priority = t.priority
+            priority = ""
+            if num_priority == 1 :
+                priority = emoji.emojize("LOW :blue_circle:" , language="alias")
+            elif num_priority == 2 :
+                priority = emoji.emojize("MEDIUM :yellow_circle:" , language="alias")
+            else :
+                priority = emoji.emojize("HIGH :red_circle:" , language="alias")
+            print("priority : " + priority)
             print("******************************************")
         print()
     def save_list(self) :
@@ -95,7 +127,10 @@ class to_do_list :
             task_priority = task.priority
             writer.writerow([task_name , task_description , task_priority])
         my_file.close()
+        
+        print()
         print("file saved successfully !")
+        print()
         
     def load_file(self) :
         
@@ -104,16 +139,24 @@ class to_do_list :
             my_file = open(f"{name}.csv" , "r")
             self.todolist.clear()
             reader = csv.reader(my_file)
+            
             for line in reader :
+                if len(line) < 3 :
+                    continue
                 task_name = line[0]
                 task_description = line[1]
-                task_priority = line[2]
+                task_priority = int(line[2])
                 newtask = task(task_name , task_description , task_priority)
                 self.todolist.append(newtask)
+                
+            print()
             print(f"{name} loaded successfully !")
+            print() 
+            
         except FileNotFoundError :
+            print()
             print(f"{name} not found")
-
+            print()
             
 if __name__ == "__main__" :
     
